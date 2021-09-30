@@ -1,0 +1,24 @@
+COMMENT = _{ ";" ~ ANY* ~ (NEWLINE | EOI) }
+WHITESPACE = _{ " " | NEWLINE | "," | "\t" }
+
+boolean = { "true" | "false" }
+
+symbol = @{ ASCII_ALPHA ~ (ASCII_ALPHA | ASCII_DIGIT | "-" | "_")+ }
+keyword = ${ ":" ~ symbol }
+
+char = {
+  !("\"" | "\\") ~ ANY
+  | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
+  | "\\" | ("u" ~ ASCII_HEX_DIGIT{4})
+}
+charseq = @{ char* }
+
+string = ${ "\"" ~ charseq ~ "\"" }
+
+vector = { "[" ~ expr* ~ "]" }
+map = { "{" ~ (expr ~ expr)* ~ "}"}
+list = { "(" ~ expr* ~ ")" }
+
+expr = { symbol | keyword | string | vector | map | list }
+
+main = { SOI ~ WHITESPACE* ~ (expr | WHITESPACE | COMMENT)* ~ WHITESPACE* ~ EOI }
