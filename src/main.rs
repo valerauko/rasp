@@ -16,14 +16,24 @@ pub enum Error {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Value {
+    Vector(Vec<Value>),
     String(String),
 }
 
 pub type Result = std::result::Result<Value, Error>;
 
+fn rasp_children(parsed: Pair<Rule>) -> std::result::Result<Vec<Value>, Error> {
+    let mut children = vec![];
+    for child in parsed.into_inner() {
+        children.push(rasp_read(child)?);
+    }
+    Ok(children)
+}
+
 fn rasp_read(parsed: Pair<Rule>) -> Result {
     match parsed.as_rule() {
         Rule::expr => rasp_read(parsed.into_inner().next().unwrap()),
+        Rule::vector => Ok(Value::Vector(rasp_children(parsed)?)),
         Rule::string => {
             // string by definition has a charseq inner
             let charseq = parsed.into_inner().next().unwrap().as_str().into();
