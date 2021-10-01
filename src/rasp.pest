@@ -3,8 +3,10 @@ WHITESPACE = _{ " " | NEWLINE | "," | "\t" }
 
 boolean = { "true" | "false" }
 
-symbol = @{ ASCII_ALPHA ~ (ASCII_ALPHA | ASCII_DIGIT | "-" | "_")+ }
-keyword = ${ ":" ~ symbol }
+name = @{ ASCII_ALPHA ~ (ASCII_ALPHA | ASCII_DIGIT | "-" | "_")+ }
+namespace = { (name ~ ".")* ~ name }
+symbol = ${ (namespace ~ "/")? ~ name }
+keyword = ${ ":" ~ ":"? ~ symbol }
 
 char = {
   !("\"" | "\\") ~ ANY
