@@ -1,0 +1,12 @@
+(ns my.app.core
+  (require [my.app.routes :refer [router]]
+           [awesome-http.server :as http]
+           [std.env :as env]))
+
+(defn main
+  ([called-as port]
+   (main called-as {:port port}))
+  ([_ {:keys [port]}]
+   (let [compress? (bool (env/var "HTTP_COMPRESSION"))]
+     (http/start-server router {:port port :compress? compress?})
+     (eprintln! (str "Server started on port " port)))))
