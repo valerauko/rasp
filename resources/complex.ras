@@ -9,4 +9,4 @@
   ([_ {:keys [port]}]
    (let [compress? (bool (env/var "HTTP_COMPRESSION"))]
      (http/start-server router {:port port :compress? compress?})
-     (eprintln! (str "Server started on port " port)))))
+     (eprintln! "Server started on port {}" port))))
