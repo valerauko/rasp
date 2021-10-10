@@ -11,14 +11,27 @@ char = {
 charseq = @{ char* }
 string = ${ "\"" ~ charseq ~ "\"" }
 
-namesym = {
-  "*" | "+" | "!" | "-" | "_" | "?" | "%" | "<" | ">" | "=" | "/"
+NAMESYM = {
+  "*" | "+" | "!" | "-" | "_" | "?" | "%" | "<" | ">" | "="
 }
-name = @{ (namesym | LETTER) ~ (namesym | LETTER | NUMBER)* }
-// nsbit = @{ LETTER ~ (LETTER | NUMBER | "-")* }
-namespace = ${ (name ~ ".")* ~ name }
-symbol = ${ namespace ~ ("/" ~ name)? }
-keyword = ${ ":" ~ ":"? ~ (namespace ~ "/")? ~ (name | string) }
+segment = @{ (XID_START | NAMESYM) ~ (XID_CONTINUE | NAMESYM)* }
+slash = @{ "/" }
+access = @{ "." ~ segment? }
+symbol = ${
+  (
+    slash
+    | access
+    | (
+      segment ~ (
+        ("." ~ segment)* ~ (
+          slash ~ (slash | segment)
+        )?
+      )
+    )
+  ) ~ !(XID_CONTINUE | NAMESYM | "." | "/")
+}
+string_keyword = ${ ((segment ~ ("." ~ segment)* ~ slash)? ~ string) }
+keyword = ${ ":" ~ ":"? ~ (symbol | string_keyword) }
 
 vector = { "[" ~ expr* ~ "]" }
 map = { "{" ~ (expr ~ expr)* ~ "}"}
@@ -26,4 +39,4 @@ list = { "(" ~ expr* ~ ")" }
 
 expr = { symbol | keyword | string | vector | map | list }
 
-rasp = { SOI ~ expr* }
+rasp = { SOI ~ expr+ }
