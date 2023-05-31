@@ -34,6 +34,7 @@ pub type Result = std::result::Result<Value, Error>;
 fn main() {
     let testfile = fs::read_to_string("resources/complex.ras").unwrap();
     let parsed = read::parse(&testfile);
+    // let test_thing: Vec<Box<dyn std::fmt::Debug>> = vec![];
 
     println!("{:?}", parsed);
 }
