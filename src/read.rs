@@ -1,4 +1,4 @@
-use pest::{Parser, iterators::Pair};
+use pest::{iterators::Pair, Parser};
 
 #[derive(Parser)]
 #[grammar = "rasp.pest"]
@@ -42,9 +42,14 @@ fn rasp_symbol(parsed: Pair<Rule>) -> Result {
     let name = pieces.next().unwrap().as_str().into();
     let ns = match pieces.next() {
         Some(pair) => match pair.as_rule() {
-            Rule::slash => Some(pieces.rev().map(|item| Box::new(item.as_str().into())).collect()),
+            Rule::slash => Some(
+                pieces
+                    .rev()
+                    .map(|item| Box::new(item.as_str().into()))
+                    .collect(),
+            ),
             _ => None,
-        }
+        },
         None => None,
     };
     Ok(Value::Symbol(ns, name))
@@ -60,9 +65,14 @@ fn rasp_keyword(parsed: Pair<Rule>) -> Result {
     };
     let ns = match pieces.next() {
         Some(pair) => match pair.as_rule() {
-            Rule::slash => Some(pieces.rev().map(|item| Box::new(item.as_str().into())).collect()),
+            Rule::slash => Some(
+                pieces
+                    .rev()
+                    .map(|item| Box::new(item.as_str().into()))
+                    .collect(),
+            ),
             _ => None,
-        }
+        },
         None => None,
     };
     Ok(Value::Keyword(ns, name))
@@ -86,8 +96,12 @@ fn rasp_read(parsed: Pair<Rule>) -> Result {
     }
 }
 
-pub fn parse(string: &str) -> Result {
-    let parsed = RaspParser::parse(Rule::rasp, string).unwrap().next().unwrap();
+pub fn parse(string: &str) -> std::result::Result<Pair<'_, Rule>, Error> {
+    // let parsed =
+    Ok(RaspParser::parse(Rule::rasp, string)
+        .unwrap()
+        .next()
+        .unwrap())
 
-    rasp_read(parsed)
+    // rasp_read(parsed)
 }
