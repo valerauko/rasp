@@ -16,27 +16,17 @@ NAMESYM = {
 }
 segment = @{ (XID_START | NAMESYM) ~ (XID_CONTINUE | NAMESYM)* }
 slash = @{ "/" }
-access = @{ "." ~ segment? }
-symbol = ${
-  (
-    slash
-    | access
-    | (
-      segment ~ (
-        ("." ~ segment)* ~ (
-          slash ~ (slash | segment)
-        )?
-      )
-    )
-  ) ~ !(XID_CONTINUE | NAMESYM | "." | "/")
-}
-string_keyword = ${ ((segment ~ ("." ~ segment)* ~ slash)? ~ string) }
-keyword = ${ ":" ~ ":"? ~ (symbol | string_keyword) }
+
+namespace = ${ segment ~ ("." ~ segment)* }
+name = ${ slash | segment }
+
+symbol = ${ (namespace ~ slash)? ~ name }
+keyword = ${ ":" ~ ":"? ~ (namespace ~ slash)? ~ (name | string) }
 
 vector = { "[" ~ expr* ~ "]" }
 map = { "{" ~ (expr ~ expr)* ~ "}"}
 list = { "(" ~ expr* ~ ")" }
 
-expr = { symbol | keyword | string | vector | map | list }
+expr = { namespace | symbol | keyword | string | vector | map | list }
 
 rasp = { SOI ~ expr+ }
