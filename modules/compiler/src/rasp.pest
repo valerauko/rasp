@@ -24,9 +24,12 @@ symbol = ${ (namespace ~ slash)? ~ name }
 keyword = ${ ":" ~ ":"? ~ (namespace ~ slash)? ~ (name | string) }
 
 vector = { "[" ~ expr* ~ "]" }
-map = { "{" ~ (expr ~ expr)* ~ "}"}
+shorthand = { "{" ~ symbol* ~ "}" }
+map = { "{" ~ shorthand? ~ (expr ~ expr)* ~ "}"}
 list = { "(" ~ expr* ~ ")" }
 
-expr = { namespace | symbol | keyword | string | vector | map | list }
+decimal = @{ "0" | (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
+
+expr = { decimal | symbol | namespace | keyword | string | vector | map | list }
 
 rasp = { SOI ~ expr+ }
