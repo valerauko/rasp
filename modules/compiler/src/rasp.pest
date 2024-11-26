@@ -21,7 +21,8 @@ namespace = ${ segment ~ ("." ~ segment)* }
 name = ${ slash | segment }
 
 symbol = ${ (namespace ~ slash)? ~ name }
-keyword = ${ ":" ~ ":"? ~ (namespace ~ slash)? ~ (name | string) }
+kw_alias = @{ ":" }
+keyword = ${ ":" ~ kw_alias? ~ (namespace ~ slash)? ~ (name | string) }
 
 vector = { "[" ~ expr* ~ "]" }
 shorthand = { "{" ~ symbol* ~ "}" }
