@@ -1,1 +1,3 @@
+(ns foo.bar)
+
 (println! [12])

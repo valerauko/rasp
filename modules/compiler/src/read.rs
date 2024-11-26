@@ -19,7 +19,7 @@ fn read(pair: Pair<Rule>) -> Primitive {
         Rule::vector => {
             Primitive::Vector(pair.into_inner().fold(Vector::new(), |acc, item| acc.push_back(read(item))))
         }
-        _ => todo!(),
+        _ => todo!("{:?}", pair),
     }
 }
 

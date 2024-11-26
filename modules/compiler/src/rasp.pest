@@ -20,6 +20,9 @@ slash = @{ "/" }
 namespace = ${ segment ~ ("." ~ segment)* }
 name = ${ slash | segment }
 
+// (ns foo.bar.baz)
+// (let [x y])
+// (.hoge fuga)
 symbol = ${ (namespace ~ slash)? ~ name }
 kw_alias = @{ ":" }
 keyword = ${ ":" ~ kw_alias? ~ (namespace ~ slash)? ~ (name | string) }
@@ -31,6 +34,6 @@ list = { "(" ~ expr* ~ ")" }
 
 decimal = @{ "0" | (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
 
-expr = { decimal | namespace | symbol | keyword | string | vector | map | list }
+expr = { decimal | symbol | keyword | string | vector | map | list }
 
 rasp = { SOI ~ expr+ }
