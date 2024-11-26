@@ -8,7 +8,7 @@ pub struct RaspParser;
 use runtime::{Primitive};
 
 fn read(pair: Pair<Rule>) -> Primitive {
-    println!("{:?}", pair.as_rule());
+    // println!("{:?}", pair.as_rule());
     match pair.as_rule() {
         Rule::expr => read(pair.into_inner().next().unwrap()),
         Rule::symbol => Primitive::Symbol(pair.into_inner().next().unwrap().as_str().into()),
