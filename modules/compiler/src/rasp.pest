@@ -31,6 +31,6 @@ list = { "(" ~ expr* ~ ")" }
 
 decimal = @{ "0" | (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
 
-expr = { decimal | symbol | namespace | keyword | string | vector | map | list }
+expr = { decimal | namespace | symbol | keyword | string | vector | map | list }
 
 rasp = { SOI ~ expr+ }
