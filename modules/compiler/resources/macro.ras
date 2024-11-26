@@ -1,13 +1,7 @@
-(* 2 4)
+(defn x2
+  [v]
+  (* v 2))
 
-;; (defn x2
-;;   [v]
-;;   (* v 2))
-
-;; (defmacro const-x2
-;;   [v]
-;;   (x2 v))
-
-;; (defn main
-;;   []
-;;   (const-x2 5))
+(defn main
+  []
+  (x2 5))
